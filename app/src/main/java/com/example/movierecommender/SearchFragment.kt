@@ -47,11 +47,14 @@ class SearchFragment : Fragment() {
     lateinit var retrofit: Retrofit
     lateinit var movieSearchApi: MovieSearchApi
 
+    var mUsername = ""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mUsername = arguments!!.getString("username")!!
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
@@ -84,9 +87,9 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val term = s.toString()
-                if (term.length > 1) {
+                //if (term.length > 1) {
                     updateSearchResults(term)
-                }
+                //}
             }
 
         })
@@ -117,9 +120,9 @@ class SearchFragment : Fragment() {
         mSimilarMovieAdapter = MovieListAdapter(mSimilarMoviesList, activity!!)
         mSimilarMovieAdapter.setOnItemClickListener(object: MovieListAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val newFragment = MovieFragment.newInstance(mSimilarMovieAdapter.mSimilarMovieList[position].url)
+                val newFragment = MovieFragment.newInstance(mSimilarMovieAdapter.mSimilarMovieList[position].url, mUsername)
                 val transaction = activity!!.supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, newFragment)
+                transaction.add(R.id.fragment_container, newFragment)
                 transaction.addToBackStack(null)
                 transaction.commit()
             }

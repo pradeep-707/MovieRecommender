@@ -7,13 +7,8 @@
         android:title="Search" />
 
     <item
-        android:id="@+id/nav_watched"
+        android:id="@+id/nav_tickets"
         android:icon="@drawable/ic_movie"
-        android:title="Watched Movies" />
-
-    <item
-        android:id="@+id/nav_other"
-        android:icon="@drawable/ic_category"
-        android:title="Favorite Categories" />
+        android:title="Tickets" />
 
 </menu>
