@@ -7,14 +7,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.*
 
 class RegisterActivity : AppCompatActivity() {
 
-    lateinit var mRegUsername: EditText
-    lateinit var mRegPassword: EditText
-    lateinit var mRegEmail: EditText
-    lateinit var mRegName: EditText
+    lateinit var mRegUsername: TextInputLayout
+    lateinit var mRegPassword: TextInputLayout
+    lateinit var mRegEmail: TextInputLayout
+    lateinit var mRegName: TextInputLayout
 
     lateinit var mErrorTextView: TextView
 
@@ -24,6 +25,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        supportActionBar!!.hide()
 
         mRegEmail = findViewById(R.id.reg_email_edit_text)
         mRegName = findViewById(R.id.reg_name_edit_text)
@@ -49,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun isUserAlreadyExists() {
-        val reference = FirebaseDatabase.getInstance().reference.child("users").child(mRegUsername.text.toString())
+        val reference = FirebaseDatabase.getInstance().reference.child("users").child(mRegUsername.editText!!.text.toString())
         reference.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(ds: DataSnapshot) {
                 if (ds.exists()) {
@@ -77,10 +79,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun fieldsEmpty(): Boolean {
-        if (mRegEmail.text.isEmpty() ||
-                mRegName.text.isEmpty() ||
-                mRegPassword.text.isEmpty() ||
-                mRegUsername.text.isEmpty()) {
+        if (mRegEmail.editText!!.text.isEmpty() ||
+                mRegName.editText!!.text.isEmpty() ||
+                mRegPassword.editText!!.text.isEmpty() ||
+                mRegUsername.editText!!.text.isEmpty()) {
             return true
         }
         return false
@@ -88,10 +90,10 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun getRegistrationInformation(): UserInfo {
         return UserInfo(
-            mRegUsername.text.toString(),
-            mRegName.text.toString(),
-            mRegEmail.text.toString(),
-            mRegPassword.text.toString()
+            mRegUsername.editText!!.text.toString(),
+            mRegName.editText!!.text.toString(),
+            mRegEmail.editText!!.text.toString(),
+            mRegPassword.editText!!.text.toString()
         )
     }
 

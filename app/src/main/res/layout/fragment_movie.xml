@@ -6,12 +6,16 @@
     android:layout_width="match_parent"
     android:background="@android:color/black">
 
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        tools:context=".MovieFragment">
+        android:id="@+id/parent_view"
+        tools:context=".MovieFragment"
+        tools:visibility="visible"
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/movie_poster"
@@ -20,180 +24,177 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp" />
 
-        <TextView
-            android:id="@+id/movie_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/movie_poster"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            tools:text="Interstellar (2014)" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/percent_liked_text_view"
-            android:layout_centerHorizontal="true"
-            android:textColor="@android:color/white"
-            android:layout_below="@id/movie_name"/>
 
         <ImageView
-            android:id="@+id/imdb_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginRight="32dp"
-            android:layout_toLeftOf="@id/movie_poster"
-            android:src="@drawable/imdb_small" />
+        android:id="@+id/imdb_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="32dp"
+        android:layout_toLeftOf="@id/movie_poster"
+        android:src="@drawable/imdb_small" />
 
         <TextView
-            android:id="@+id/movie_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imdb_icon"
-            android:layout_marginRight="35dp"
-            android:layout_toLeftOf="@id/movie_poster"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            tools:text="8.6" />
+        android:id="@+id/movie_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imdb_icon"
+        android:layout_marginRight="35dp"
+        android:layout_toLeftOf="@id/movie_poster"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        tools:text="8.6" />
 
         <ImageView
-            android:id="@+id/duration_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="100dp"
-            android:layout_toRightOf="@id/movie_poster"
-            android:src="@drawable/ic_timelapse" />
+        android:id="@+id/duration_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="100dp"
+        android:layout_toRightOf="@id/movie_poster"
+        android:src="@drawable/ic_timelapse" />
 
         <TextView
-            android:id="@+id/movie_duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/duration_text_view"
-            android:layout_toRightOf="@id/movie_poster"
-            tools:text="160 min."
-            android:textSize="24sp"
-            android:textColor="@android:color/white"
-            android:layout_marginLeft="32dp"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BOOK TICKETS"
-            android:layout_below="@id/movie_duration"
-            android:id="@+id/book_tickets_button"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="24dp"
-            android:id="@+id/movie_genre"
-            android:layout_below="@id/percent_liked_text_view"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:id="@+id/movie_story"
-            android:layout_below="@id/movie_genre"
-            android:layout_centerHorizontal="true"
-            tools:text="Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage."
-            />
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:id="@+id/progressbar"
-            android:visibility="invisible" />
-
-
-        <TextView
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rate_movie_text"
-            android:text="Rate the movie"
-            android:textColor="@android:color/white"
-            android:layout_below="@id/movie_story"/>
+        android:id="@+id/movie_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/duration_text_view"
+        android:layout_toRightOf="@id/movie_poster"
+        tools:text="160 min."
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:layout_marginLeft="32dp"/>
 
         <LinearLayout
-            android:layout_marginTop="16dp"
-            android:layout_below="@id/rate_movie_text"
+            android:layout_below="@+id/movie_poster"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:id="@+id/rate_movie_linear_layout"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/thumb_up"
+            <TextView
+                android:id="@+id/movie_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_thumb_up" />
+                android:layout_marginTop="16dp"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                tools:text="Interstellar (2014)" />
 
-            <ImageView
-                android:id="@+id/thumb_down"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/percent_liked_text_view"
+                tools:text="100% liked this movie"
                 android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_thumb_down" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Comments"
-            android:textColor="@android:color/white"
-            android:layout_below="@id/rate_movie_linear_layout"
-            android:layout_marginTop="16dp"
-            android:id="@+id/comments_text_view"
-            android:layout_marginLeft="16dp" />
-
-        <LinearLayout
-            android:layout_below="@id/comments_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/comment_linear_layout"
-            android:orientation="horizontal">
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:hint="write a comment here"
-                android:background="@android:color/white"
-                android:id="@+id/comment_edit_text"/>
+                android:textColor="@android:color/white" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="POST"
-                android:id="@+id/comment_post_button" />
+                android:text="BOOK TICKETS"
+                android:layout_gravity="center"
+                android:id="@+id/book_tickets_button"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:id="@+id/movie_genre"
+                tools:text="Action, Adventure"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:id="@+id/movie_story"
+                tools:text="Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage."
+                />
+
+
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rate_movie_text"
+                android:text="Rate the movie"
+                android:textColor="@android:color/white" />
+
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:id="@+id/rate_movie_linear_layout"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/thumb_up"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_thumb_up" />
+
+                <ImageView
+                    android:id="@+id/thumb_down"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_thumb_down" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comments"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="16dp"
+                android:id="@+id/comments_text_view"
+                android:layout_marginLeft="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment_linear_layout"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="write a comment here"
+                    android:background="@android:color/white"
+                    android:id="@+id/comment_edit_text"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="POST"
+                    android:id="@+id/comment_post_button" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/comments_recycler_view"
+                tools:listitem="@layout/comments_item"/>
 
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/comments_recycler_view"
-            android:layout_below="@id/comment_linear_layout"
-            tools:listitem="@layout/comments_item"/>
 
     </RelativeLayout>
 

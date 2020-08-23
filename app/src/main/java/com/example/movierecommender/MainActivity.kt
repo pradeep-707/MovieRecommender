@@ -1,7 +1,9 @@
 package com.example.movierecommender
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -30,14 +32,22 @@ class MainActivity : AppCompatActivity() {
     private val bottomNavListener: BottomNavigationView.OnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener {
 
-            val selectedFragment: Fragment = when (it.itemId) {
-                R.id.nav_tickets -> UserTicketsFragment()
-                else -> SearchFragment()
+
+            var selectedFragment: Fragment? = null
+            when (it.itemId) {
+                R.id.nav_tickets -> selectedFragment = UserTicketsFragment()
+                R.id.nav_logout -> {
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else -> selectedFragment = SearchFragment()
             }
 
             val bundle = Bundle()
             bundle.putString("username", username)
-            selectedFragment.arguments = bundle
+            selectedFragment!!.arguments = bundle
 
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
                 selectedFragment).commit()

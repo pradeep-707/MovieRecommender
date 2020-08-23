@@ -98,7 +98,7 @@ class TicketFragment : Fragment() {
     private fun calculateDates() {
         val calendar: Calendar = Calendar.getInstance()
         for (i in 0..2) {
-            calendar.add(Calendar.DATE, i)
+            calendar.add(Calendar.DATE, 1)
             val date = DateFormat.getDateInstance(DateFormat.LONG).format(calendar.time)
             possibleDates.add(date)
         }

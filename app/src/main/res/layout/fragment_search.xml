@@ -7,17 +7,41 @@
     tools:context=".SearchFragment"
     android:orientation="vertical">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search for a movie"
-        android:id="@+id/search_edit_text"/>
+        android:id="@+id/search_edit"
+
+        android:hint="Movies Like..."
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/movie_suggestion_recycler_item"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Popular Movies"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        android:background="@android:color/black"
+        android:textColor="@android:color/white"
+        android:id="@+id/popular_movies_text_view"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/popular_grid_recycler_view"
+        tools:listitem="@layout/popular_item"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

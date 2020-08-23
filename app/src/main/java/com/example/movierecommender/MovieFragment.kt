@@ -71,7 +71,7 @@ class MovieFragment : Fragment() {
         mMovieStory = view.findViewById(R.id.movie_story)
         mMovieDuration = view.findViewById(R.id.movie_duration)
         mMovieGenre = view.findViewById(R.id.movie_genre)
-        mProgressBar = view.findViewById(R.id.progressbar)
+        //mProgressBar = view.findViewById(R.id.progressbar)
 
         mPercentLikedTextView = view.findViewById(R.id.percent_liked_text_view)
         mThumbUp = view.findViewById(R.id.thumb_up)
@@ -219,13 +219,14 @@ class MovieFragment : Fragment() {
                 mMovieDuration.text = mMovie.duration
                 mMovieGenre.text = mMovie.genre
                 mMoviePoster.load("https://www.bestsimilar.com/" + mMovie.imageSrc)
+                view!!.findViewById<RelativeLayout>(R.id.parent_view).visibility = View.VISIBLE
             }
             return null
         }
 
         override fun onPreExecute() {
             activity!!.runOnUiThread {
-                mProgressBar.visibility = View.VISIBLE
+                //mProgressBar.visibility = View.VISIBLE
             }
             super.onPreExecute()
         }
@@ -233,7 +234,7 @@ class MovieFragment : Fragment() {
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
             activity!!.runOnUiThread {
-                mProgressBar.visibility = View.INVISIBLE
+                //mProgressBar.visibility = View.INVISIBLE
             }
         }
     }

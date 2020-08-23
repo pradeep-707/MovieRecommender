@@ -15,15 +15,19 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
+import com.google.android.material.textfield.TextInputLayout
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 class SearchFragment : Fragment() {
     lateinit var mMainMovieImage: ImageView
@@ -41,6 +45,12 @@ class SearchFragment : Fragment() {
     lateinit var mMovieSearchAdapter: MovieSearchListAdapter
     lateinit var mMovieSearchLayoutManager: LinearLayoutManager
     val mMovieSuggestionsList = mutableListOf<Element>()
+
+    lateinit var mPopularMoviesTextView: TextView
+    lateinit var mPopularMovieRecyclerView: RecyclerView
+    lateinit var mPopularMovieGridAdapter: PopularMovieGridAdapter
+    lateinit var mPopularMovieGridLayoutManager: GridLayoutManager
+    val mPopularMovieList = mutableListOf<Movie>()
 
     lateinit var mSearchEditText: EditText
 
@@ -65,6 +75,7 @@ class SearchFragment : Fragment() {
         mMainMovieStory = view.findViewById(R.id.main_movie_story)
         mMainMovieTitle = view.findViewById(R.id.main_movie_name)
         mProgressBar = view.findViewById(R.id.progressbar)
+        mPopularMoviesTextView = view.findViewById(R.id.popular_movies_text_view)
 
         retrofit = Retrofit.Builder()
             .baseUrl("https://bestsimilar.com/")
@@ -74,8 +85,11 @@ class SearchFragment : Fragment() {
 
         initializeMovieListView()
         initializeMovieSearchListView()
+        initializePopularMovieGrid()
 
-        mSearchEditText = view.findViewById(R.id.search_edit_text)
+        PopularMovieList().execute()
+
+        mSearchEditText = view.findViewById<TextInputLayout>(R.id.search_edit).editText!!
         mSearchEditText.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
@@ -87,9 +101,12 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val term = s.toString()
-                //if (term.length > 1) {
+                if (term.length > 1) {
                     updateSearchResults(term)
-                //}
+                } else {
+                    mMovieSuggestionsList.clear()
+                    mMovieSearchAdapter.notifyDataSetChanged()
+                }
             }
 
         })
@@ -99,19 +116,39 @@ class SearchFragment : Fragment() {
         val call: Call<Suggestion> = movieSearchApi.getSuggestions(term)
         call.enqueue(object: Callback<Suggestion> {
             override fun onFailure(call: Call<Suggestion>, t: Throwable) {
-                Log.e("FAILURE", "FAILURE")
+                Log.e("Search", "FAILURE")
             }
 
             override fun onResponse(call: Call<Suggestion>, response: Response<Suggestion>) {
                 if (!response.isSuccessful) {
                     return
                 }
+                mPopularMoviesTextView.visibility = View.GONE
+                mPopularMovieRecyclerView.visibility = View.GONE
+
                 mMovieSuggestionsList.clear()
                 mMovieSuggestionsList.addAll(response.body()!!.movie)
                 mMovieSearchAdapter.notifyDataSetChanged()
             }
 
         })
+    }
+
+    private fun initializePopularMovieGrid() {
+        mPopularMovieRecyclerView = view!!.findViewById(R.id.popular_grid_recycler_view)
+        mPopularMovieGridLayoutManager = GridLayoutManager(activity!!, 2)
+        mPopularMovieGridAdapter = PopularMovieGridAdapter(mPopularMovieList)
+        mPopularMovieGridAdapter.setOnItemClickListener(object: PopularMovieGridAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val newFragment = MovieFragment.newInstance(mPopularMovieGridAdapter.mPopularMovieList[position].url, mUsername)
+                val transaction = activity!!.supportFragmentManager.beginTransaction()
+                transaction.add(R.id.fragment_container, newFragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+        })
+        mPopularMovieRecyclerView.adapter = mPopularMovieGridAdapter
+        mPopularMovieRecyclerView.layoutManager = mPopularMovieGridLayoutManager
     }
 
     private fun initializeMovieListView() {
@@ -142,6 +179,7 @@ class SearchFragment : Fragment() {
                     val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                     imm?.hideSoftInputFromWindow(v.windowToken, 0)
                 }
+                //mSearchEditText.text.clear()
                 mSearchEditText.clearFocus()
                 MovieList(mMovieSearchAdapter.mMovieSuggestionsList[position].url).execute()
                 mMovieSearchAdapter.mMovieSuggestionsList.clear()
@@ -151,6 +189,30 @@ class SearchFragment : Fragment() {
         })
         mMovieSearchRecyclerView.adapter = mMovieSearchAdapter
         mMovieSearchRecyclerView.layoutManager = mMovieSearchLayoutManager
+    }
+
+    inner class PopularMovieList(): AsyncTask<Void, Void, Void>() {
+        override fun doInBackground(vararg params: Void?): Void? {
+            val url = "https://bestsimilar.com/"
+            val document: Document = Jsoup.connect(url).get()
+            val popularMoviesSection = document.select(".section-list-body.section-movie-grid").first()
+            val popularMovies = popularMoviesSection.select("div.col-md-2.col-sm-2.col-ms-4.col-xs-4")
+            println(popularMovies.first())
+            for (popularMovie in popularMovies) {
+                val imageLink = popularMovie.select(".img-responsive.lazy").first().attr("data-src")
+                val movieLink = popularMovie.select(".block-ins-caption").select("a").attr("href")
+                val movieName = popularMovie.select(".block-ins-caption").text()
+                mPopularMovieList.add(Movie(
+                    name = movieName,
+                    imageSrc = imageLink,
+                    url = movieLink
+                ))
+            }
+            activity!!.runOnUiThread {
+                mPopularMovieGridAdapter.notifyDataSetChanged()
+            }
+            return null
+        }
     }
 
     inner class MovieList(val url: String): AsyncTask<Void, Void, Void>() {
@@ -174,8 +236,14 @@ class SearchFragment : Fragment() {
                 val similarMovie = Movie()
                 similarMovie.name = it.select("a[href]").first().text()
                 similarMovie.url = it.select("a[href]").first().attr("href")
-                similarMovie.rating = it.select("span[title=\"rating\"]").first().text().toFloat()
-                similarMovie.votes = it.select("span[title=\"votes\"]").first().text()
+                Log.i("ERROR", similarMovie.name)
+                try {
+                    similarMovie.rating = it.select("span[title=\"rating\"]").first().text().toFloat()
+                    similarMovie.votes = it.select("span[title=\"votes\"]").first().text()
+                } catch (e: Exception) {
+                    similarMovie.rating = 0F
+                    similarMovie.votes = "0"
+                }
                 similarMovie.imageSrc =
                     it.select("img[alt=\"${similarMovie.name}\"]").first().attr("data-src")
                 similarMovie.story = it.select("div[class=\"attr attr-story\"]").first()
